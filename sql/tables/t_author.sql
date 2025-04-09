@@ -1,0 +1,5 @@
+CREATE TABLE author(  
+    author_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    first_name NVARCHAR(100) NOT NULL,
+    last_name NVARCHAR(100) NOT NULL
+);
