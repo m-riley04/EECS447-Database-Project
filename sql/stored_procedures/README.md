@@ -1,6 +1,6 @@
 # stored_procedures
 This directory is used for containing stored procedures. A stored procedure is SQL code that is saved and can be reused *within SQL*.
-If you need more information on what a stored procedure is, go [here](https://www.w3schools.com/sql/sql_stored_procedures.asp).
+If you need more information on what a stored procedure is, go [here](https://www.w3schools.com/sql/sql_stored_procedures.asp) or [here for MariaDB specific](https://mariadb.com/kb/en/create-procedure/).
 
 # Naming Conventions
 - Each script FILE must be prefixed with "sp_".
@@ -19,10 +19,14 @@ spProcedureName
 # Example Syntax
 Inside the stored procedure file:
 ```sql
-CREATE PROCEDURE spProcedureName @[parameter] [parameter_type]
-AS
-[sql_statement]
-GO;
+DELIMITER //
+
+CREATE PROCEDURE spProcedureName([params])
+BEGIN
+    [sql_statement]
+END //
+
+DELIMITER;
 ```
 
 Then to use it elsewhere:

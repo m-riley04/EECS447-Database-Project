@@ -1,0 +1,8 @@
+DELIMITER //
+
+CREATE PROCEDURE spGenreNames()
+BEGIN
+    SELECT `name` FROM genre;
+END //
+
+DELIMITER;
