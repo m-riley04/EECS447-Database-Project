@@ -8,9 +8,9 @@ CREATE TABLE media_item (
     availability TINYINT NOT NULL CHECK (availability IN (0, 1)),
     isbn VARCHAR(13) NOT NULL CHECK (CHAR_LENGTH(isbn) = 13 AND isbn REGEXP '^(978|979)[0-9]+$'),
     
-    FOREIGN KEY (author_id) REFERENCES author(author_id),
-    FOREIGN KEY (genre_id) REFERENCES genre(genre_id),
-    FOREIGN KEY (media_type_id) REFERENCES media_type(media_type_id)
+    CONSTRAINT `fk_author_id` FOREIGN KEY (author_id) REFERENCES author(author_id),
+    CONSTRAINT `fk_genre_id` FOREIGN KEY (genre_id) REFERENCES genre(genre_id),
+    CONSTRAINT `fk_media_type_id` FOREIGN KEY (media_type_id) REFERENCES media_type(media_type_id)
 );
 
 
