@@ -1,4 +1,4 @@
-CREATE TABLE transaction_table (
+CREATE TABLE `transaction` (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     media_id INT NOT NULL,
