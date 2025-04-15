@@ -19,10 +19,23 @@ CREATE TABLE media_type (
     media_type_name VARCHAR(50) NOT NULL CHECK (CHAR_LENGTH(media_type_name) >= 1)
 );
 
+-- From the t_fee_status.sql file
+CREATE TABLE fee_status (
+    fee_status_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name NVARCHAR(50) NOT NULL,
+    description NVARCHAR(300)
+);
+
 -- From the t_membership_type.sql file
 CREATE TABLE membership_type(
     membership_type_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     membership_type_name NVARCHAR(50) NOT NULL CHECK (LENGTH(membership_type_name) >= 1)
+);
+
+-- From the t_account_status.sql file
+CREATE TABLE account_status (
+    account_status_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    status_name VARCHAR(50) NOT NULL UNIQUE
 );
 
 -- From the t_media_item.sql file
@@ -41,12 +54,6 @@ CREATE TABLE media_item (
     CONSTRAINT `fk_media_type_id` FOREIGN KEY (media_type_id) REFERENCES media_type(media_type_id)
 );
 
--- From the t_account_status.sql file
-CREATE TABLE account_status (
-    account_status_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    status_name VARCHAR(50) NOT NULL UNIQUE
-);
-
 -- From the t_user.sql file
 CREATE TABLE `user`(  
     user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -62,23 +69,19 @@ CREATE TABLE `user`(
     CONSTRAINT `fk_account_status_id` FOREIGN KEY (account_status_id) REFERENCES account_status(account_status_id)
 );
 
-CREATE TABLE fee_status (
-    fee_status_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name NVARCHAR(50) NOT NULL,
-    description NVARCHAR(300)
-);
-
+-- From the t_fee.sql file
 CREATE TABLE fee (
     fee_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     date_issued DATETIME NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     fee_status_id INT NOT NULL,
+    
     CONSTRAINT `fk_user_id` FOREIGN KEY (user_id) REFERENCES user(user_id),
     CONSTRAINT `fk_fee_status_id` FOREIGN KEY (fee_status_id) REFERENCES fee_status(fee_status_id)
 );
 
-
+-- From the t_transaction.sql file
 CREATE TABLE `transaction` (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,

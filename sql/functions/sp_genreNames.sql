@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE spGenreNames()
+CREATE OR REPLACE PROCEDURE spGenreNames()
 BEGIN
     SELECT `name` FROM genre;
 END //

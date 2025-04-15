@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE spPopulateGenreTable()
+CREATE OR REPLACE PROCEDURE spPopulateGenreTable()
 BEGIN
     INSERT INTO genre (name)
     VALUES
