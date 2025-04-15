@@ -12,5 +12,7 @@ interface ImportMetaEnv {
     readonly VITE_SSH_PASSWORD: string
     readonly VITE_SSH_HOST: string
     readonly VITE_SSH_PORT: number
-    // more env variables...
+
+    readonly VITE_SERVER_HOST: number
+    readonly VITE_SERVER_PORT: number
   }

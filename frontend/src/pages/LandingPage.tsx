@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { fetchData } from '../server/server_functions';
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -8,6 +9,7 @@ const LandingPage = () => {
             <p>Welcome to the library.</p>
             <p>Please login below.</p>
             <button onClick={() => navigate('/login')}>Login</button>
+            <button onClick={() => fetchData()}>Test</button>
         </>
     )
 }
