@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE spPopulateAuthorTable()
+CREATE OR REPLACE PROCEDURE spPopulateAuthorTable()
 BEGIN
     INSERT INTO author (first_name, last_name)
     VALUES
