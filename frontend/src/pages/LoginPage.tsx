@@ -6,9 +6,12 @@ const LoginPage = () => {
     function handleLogin(event: React.FormEvent) {
         event.preventDefault();
 
-        /// TODO: Add login functionality
+        // Get email field value
+        const email = (event.target as HTMLFormElement).email.value;
 
-        console.log("Login form submitted");
+        /// TODO: Check if email is in users list
+
+        console.log(`Login form submitted with email '${email}'`);
         navigate("/home");
     }   
 
