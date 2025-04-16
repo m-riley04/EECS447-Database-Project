@@ -11,18 +11,18 @@ dotenv.config();
 
 // Initialize express app
 const app = express();
-const port = process.env.VITE_SERVER_PORT || 3001;
+const port = process.env.SERVER_PORT || 3001;
 
 // Initialize SSH tunnel
 const [server, conn] = await createTunnel(tunnelConfig, serverConfig, sshConfig, forwardConfig);
 
 // Initialize MariaDB connection pool
 const pool = createPool({
-  host: process.env.VITE_SERVER_HOST || 'localhost',
-  user: process.env.VITE_DB_USERNAME,
-  password: process.env.VITE_DB_PASSWORD,
-  database: process.env.VITE_DB_NAME,
-  port: Number(process.env.VITE_DB_PORT),
+  host: process.env.SERVER_HOST || 'localhost',
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT),
   connectionLimit: 5
 });
 

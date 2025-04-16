@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "The backend server for the EECS 447 web-app.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m-riley04/EECS447-Database-Project.git"
+  },
+  "author": "Riley Meyerkorth",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/m-riley04/EECS447-Database-Project/issues"
+  },
+  "homepage": "https://github.com/m-riley04/EECS447-Database-Project#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mariadb": "^3.4.1",
+    "tunnel-ssh": "^5.2.0"
+  }
+}

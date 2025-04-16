@@ -9,6 +9,8 @@ npm install
 npm run dev
 ```
 
+> NOTE: The project utilizes a frontend and a backend. Please note that the database calls of the web-app will not work without the server running in the background. To do that, view the [backend documentation](backend/README.md)
+
 # Notable Libraries
 - React Vite (Typescript)
 
