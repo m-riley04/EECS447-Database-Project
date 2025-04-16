@@ -11,7 +11,7 @@ export const sshConfig = {
   };
 
 export const serverConfig = {
-    port: process.env.DB_PORT,
+    port: Number(process.env.DB_PORT) || 3306,
 };
 
 export const tunnelConfig = {
