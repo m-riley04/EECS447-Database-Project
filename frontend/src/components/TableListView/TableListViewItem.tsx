@@ -9,7 +9,7 @@ const TableListViewItem: React.FC<TableListViewItemProps> = ({
 
     return (
         <tr>
-            {Object.keys(item).map((key, index) => <tr key={index}>{key}</tr>)}
+            {Object.values(item).map((key, index) => <td key={index}>{key}</td>)}
         </tr>
     )
 }

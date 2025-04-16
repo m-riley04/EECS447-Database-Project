@@ -5,12 +5,14 @@ import LoginPage from './pages/LoginPage';
 import StaffPage from './pages/StaffPage';
 import UserPage from './pages/UserPage';
 import CreateAccountPage from './pages/CreateAccountPage';
+import QueryDebugPage from './pages/QueryDebugPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage/>} index/>
+        <Route path="debug" element={<QueryDebugPage/>} index/>
         <Route path="login" element={<LoginPage/>}/>
         <Route path="create-account" element={<CreateAccountPage/>}/>
         <Route path="home" element={<HomePage/>}/>

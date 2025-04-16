@@ -4,21 +4,13 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { createTunnel } from 'tunnel-ssh';
 import { createPool } from 'mariadb';
+
+// Initialize express app
 const app = express();
 const port = process.env.PORT || 3001;
 
 // Configure the .env
 dotenv.config();
-
-// Initialize CORS
-const corsOptions = {
-    origin: `http://localhost:3001`, // Replace with your origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: false,
-    optionsSuccessStatus: 204
-};
-  
-app.use(cors()); // NODE: This is much less secure
 
 // Create SSH tunnel
 const sshConfig = {
@@ -55,21 +47,53 @@ const pool = createPool({
     connectionLimit: 5
   });
 
+// Initialize CORS and app
+app.use(cors()); // NODE: This is much less secure
 app.use(express.json());
 
-// API endpoint to get data from the database
-app.get('/api', async (req, res) => {
-    let conn;
-    try {
-      conn = await pool.getConnection();
-      const rows = await conn.query("SELECT * FROM genre");
-      res.json(rows);
-    } catch (err) {
-      res.status(500).json({ error: err.toString() });
-    } finally {
-      if (conn) conn.release();
-    }
+///========= API ENDPOINTS ==========///
+async function query(sql, res, req) {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const rows = await conn.query(sql);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.toString() });
+  } finally {
+    if (conn) conn.release();
+  }
+}
+
+/**
+ * Gets all genres
+ */
+app.get('/api/genres', async (req, res) => {
+  await query('SELECT * FROM genres', res, req);
 });
+
+/**
+ * Gets all users
+ */
+app.get('/api/users', async (req, res) => {
+  await query('SELECT * FROM users', res, req);
+});
+
+/**
+ * Gets all media items
+ */
+app.get('/api/media_items', async (req, res) => {
+  await query('SELECT * FROM media_item', res, req);
+});
+
+/**
+ * Gets all authors
+ */
+app.get('/api/authors', async (req, res) => {
+  await query('SELECT * FROM author', res, req);
+});
+
+/// TODO: Add the rest of the API endpoints
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
