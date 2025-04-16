@@ -23,7 +23,7 @@ const QueryDebugPage = () => {
     const [table, setTable] = useState(0);
 
     function handleTestQuery() {
-        var api_endpoint = '';
+        let api_endpoint = '';
         switch (table) {
             case TableEnum.GENRE:
                 api_endpoint = 'genre';
