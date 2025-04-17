@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE OR REPLACE PROCEDURE spPopulateMediaItem()
+CREATE OR REPLACE PROCEDURE spPopulateMediaItemTable()
 BEGIN
     INSERT INTO media_item (
         author_id,
@@ -15,8 +15,5 @@ BEGIN
     (1, 1, 1, "Nineteen Eighty-Four", 1949, 1, 9780151660346);
 
 END; //
-
-call spPopulateMediaItem();
-
 
 DELIMITER;
