@@ -5,6 +5,6 @@ export default interface UserModel {
     first_name: string;
     last_name: string;
     email: string;
-    password: string;
+    phone: string;
     is_staff: boolean;
 };

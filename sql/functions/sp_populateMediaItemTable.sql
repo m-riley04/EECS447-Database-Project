@@ -25,7 +25,4 @@ BEGIN
 
 END; //
 
-call spPopulateMediaItem();
-
-
 DELIMITER;

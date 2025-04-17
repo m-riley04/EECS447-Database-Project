@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE OR REPLACE PROCEDURE spPopulateMediaType()
+CREATE OR REPLACE PROCEDURE spPopulateMediaTypeTable()
 BEGIN
     INSERT INTO media_type (media_type_name)
     VALUES
@@ -13,6 +13,4 @@ BEGIN
         ('Comic'),
         ('Graphic Novel');
 END; //
-
-CALL spPopulateMediaType();
 DELIMITER ;

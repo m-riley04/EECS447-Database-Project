@@ -13,6 +13,4 @@ BEGIN
         ('Self-Help'),
         ('Poetry');
 END; //
-
-call spPopulateGenreTable();
 DELIMITER;
