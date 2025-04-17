@@ -95,8 +95,12 @@ const QueryDebugPage = () => {
             <TableListView items={queryItems ?? []}></TableListView>
             <p>Status: {queryLoading ? "Loading..." : "Idle" }</p>
             <p>Result: {error != null ? `Error: ${error}` : `Returned ${(queryItems ?? []).length} rows.`}</p>
-            <button onClick={handleTestQuery}>Query</button>
+            <button onClick={handleTestQuery}>Table Query</button>
+            <button onClick={() => setQueryItems([])}>Clear</button>
             <button onClick={() => navigate('/')}>Back</button>
+
+            <h2>Reports Testing</h2>
+            <button></button>
         </>
     )
 }

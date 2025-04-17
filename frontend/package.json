@@ -18,6 +18,7 @@
     "react-dom": "^19.0.0",
     "react-router": "^7.5.0",
     "react-router-dom": "^7.5.0",
+    "sass": "^1.86.3",
     "tunnel-ssh": "^5.2.0"
   },
   "devDependencies": {

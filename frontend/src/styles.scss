@@ -1,0 +1,15 @@
+.table-list-view {
+    max-height: 10%;
+    overflow-y: scroll;
+    
+    table {
+        border: black 1px solid;
+        border-collapse: collapse;
+        min-width: 10%;
+        min-height: 10%;
+    }
+
+    tr {
+        border: black 1px solid;
+    }
+}
