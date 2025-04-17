@@ -12,6 +12,7 @@ BEGIN
         ('Young Adult'),
         ('Self-Help'),
         ('Poetry');
-END //
+END; //
 
+call spPopulateGenreTable();
 DELIMITER;

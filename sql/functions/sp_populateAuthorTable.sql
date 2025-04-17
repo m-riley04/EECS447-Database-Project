@@ -17,6 +17,9 @@ BEGIN
         ('R.L.', 'Stine'),
         ('James', 'Patterson'),
         ('John', 'Irving');
-END //
 
-DELIMITER;
+END; 
+
+CALL spPopulateAuthorTable();
+
+DELIMITER ;
