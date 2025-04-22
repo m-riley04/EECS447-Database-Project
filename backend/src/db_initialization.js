@@ -94,7 +94,6 @@ export function initBasicGETRequests(params) {
 export function initBasicPUTRequests(params) {
     const { app, pool } = params;
     /// TODO: Implement this function
-    throw new Error('Function not implemented.');
 }
 
 /**
@@ -103,7 +102,6 @@ export function initBasicPUTRequests(params) {
 export function initBasicPOSTRequests(params) {
     const { app, pool } = params;
     /// TODO: Implement this function
-    throw new Error('Function not implemented.');
 }
 
 /**
@@ -112,5 +110,44 @@ export function initBasicPOSTRequests(params) {
 export function initBasicDELETERequests(params) {
     const { app, pool } = params;
     /// TODO: Implement this function
-    throw new Error('Function not implemented.');
+}
+
+/**
+ * Initializes the report requests for the server.
+ * @param {*} params 
+ */
+export function initReportRequests(params) {
+    const { app, pool } = params;
+
+    /**
+     * Report 1: Get all checked out media items
+     */
+    app.get('/api/media_items/unavailable', async (req, res) => {
+        await query('SELECT * FROM media_item WHERE availability=False', res, req, pool);
+    });
+
+    /**
+     * Report 2: Get all media items checked out by a user
+     */
+    app.get('/api/media_items/:user_id', async (req, res) => {
+        const userId = req.params.user_id;
+        await query(`SELECT * FROM media_item WHERE user_id=${userId};`, res, req, pool);
+    });
+
+    /**
+     * Report 3: Get all overdue fees
+     */
+    app.get('/api/overdue_fees', async (req, res) => {
+        await query("SELECT * FROM fee WHERE fee_status=2", res, req, pool);
+    });
+
+    /**
+     * Report 4: Get all fees for a user
+     */
+    app.get('/api/overdue_fees/:user_id', async (req, res) => {
+        const userId = req.params.user_id;
+        await query(`SELECT * FROM fee WHERE user_id=${userId} `, res, req, pool);
+    });
+
+
 }

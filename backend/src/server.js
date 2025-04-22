@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import { createTunnel } from 'tunnel-ssh';
 import { createPool } from 'mariadb';
-import { initBasicGETRequests, initBasicPUTRequests, initBasicPOSTRequests, initBasicDELETERequests } from './db_initialization.js';
+import { initBasicGETRequests, initBasicPUTRequests, initBasicPOSTRequests, initBasicDELETERequests, initReportRequests } from './db_initialization.js';
 import { sshConfig, serverConfig, tunnelConfig, forwardConfig } from './ssh_initialization.js';
 
 // Configure the .env
@@ -33,9 +33,10 @@ app.use(express.json());
 ///========= REQUEST INITIALIZATIONS ==========///
 const params = { app, pool };
 initBasicGETRequests(params);
-//initBasicPUTRequests(params);
-//initBasicPOSTRequests(params);
-//initBasicDELETERequests(params);
+initBasicPUTRequests(params);
+initBasicPOSTRequests(params);
+initBasicDELETERequests(params);
+initReportRequests(params);
 
 // Initialize listening port
 app.listen(port, () => {

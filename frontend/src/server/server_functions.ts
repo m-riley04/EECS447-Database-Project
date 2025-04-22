@@ -1,3 +1,5 @@
+import MediaItemModel from "../models/MediaItemModel";
+
 export const SERVER_HOST = import.meta.env.VITE_SERVER_HOST || 'localhost';
 export const SERVER_PORT = import.meta.env.VITE_SERVER_PORT || 3001;
 export const SERVER_API_URL = `http://${SERVER_HOST}:${SERVER_PORT}/api`;
@@ -7,4 +9,9 @@ export async function fetchData(endpoint: string = '') {
     const data = await response.json();
     return data;
 }
-  
+
+export async function getCheckedOutItems(): Promise<MediaItemModel[]> {
+    const response = await fetch(`${SERVER_API_URL}/media_items/unavailable`);
+    const data = await response.json();
+    return data;
+}

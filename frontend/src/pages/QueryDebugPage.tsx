@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import TableListView from '../components/TableListView/TableListView';
-import { fetchData } from '../server/server_functions';
+import { fetchData, getCheckedOutItems } from '../server/server_functions';
 import { useState } from 'react';
 
 enum TableEnum {
@@ -74,6 +74,22 @@ const QueryDebugPage = () => {
         console.log(`Querying data for '${TableEnum[table]}'`);
     }
 
+    function handleCheckedOutItems() {
+        setQueryLoading(true);
+        
+        getCheckedOutItems()
+            .then((data) => {
+                setQueryLoading(false);
+                //setQueryItems(data);
+                console.log("Data fetched successfully:", data);
+            })
+            .catch((error) => {
+                setQueryLoading(false);
+                setError(error);
+                console.error('Error fetching data:', error);
+            });
+    }
+
     return (
         <>
             <h1>Query Debugging Page</h1>
@@ -100,7 +116,7 @@ const QueryDebugPage = () => {
             <button onClick={() => navigate('/')}>Back</button>
 
             <h2>Reports Testing</h2>
-            <button></button>
+            <button onClick={handleCheckedOutItems}>Checked Out Items</button>
         </>
     )
 }
