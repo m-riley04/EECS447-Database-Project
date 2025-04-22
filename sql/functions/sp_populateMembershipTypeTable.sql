@@ -9,5 +9,4 @@ BEGIN
         ('Researcher', 'Researcher membership allows higher borrowing rate', 50);
 END //
 
-CALL spPopulateMembershipTypeTable();
 DELIMITER ;

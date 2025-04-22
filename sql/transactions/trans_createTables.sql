@@ -29,7 +29,9 @@ CREATE TABLE fee_status (
 -- From the t_membership_type.sql file
 CREATE TABLE membership_type(
     membership_type_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    membership_type_name NVARCHAR(50) NOT NULL CHECK (LENGTH(membership_type_name) >= 1)
+    membership_type_name NVARCHAR(50) NOT NULL CHECK (LENGTH(membership_type_name) >= 1),
+    membership_description NVARCHAR(300) NOT NULL CHECK (LENGTH(membership_description) >= 1),
+    borrowing_limit INT NOT NULL CHECK (0 <= borrowing_limit <= 50)
 );
 
 -- From the t_account_status.sql file
@@ -45,13 +47,14 @@ CREATE TABLE media_item (
     genre_id INT,
     media_type_id INT,
     title VARCHAR(255) NOT NULL CHECK (CHAR_LENGTH(title) >= 1),
-    publication_year INT NOT NULL CHECK (publication_year BETWEEN 1900 AND 2025),
+    publication_year INT NOT NULL CHECK (publication_year BETWEEN 0 AND 2025),
     availability TINYINT NOT NULL CHECK (availability IN (0, 1)),
     isbn VARCHAR(13) NOT NULL CHECK (CHAR_LENGTH(isbn) = 13 AND isbn REGEXP '^(978|979)[0-9]+$'),
     
     CONSTRAINT `fk_author_id` FOREIGN KEY (author_id) REFERENCES author(author_id),
     CONSTRAINT `fk_genre_id` FOREIGN KEY (genre_id) REFERENCES genre(genre_id),
-    CONSTRAINT `fk_media_type_id` FOREIGN KEY (media_type_id) REFERENCES media_type(media_type_id)
+    CONSTRAINT `fk_media_type_id` FOREIGN KEY (media_type_id) REFERENCES media_type(media_type_id),
+    CONSTRAINT unique_isbn UNIQUE (isbn)
 );
 
 -- From the t_user.sql file

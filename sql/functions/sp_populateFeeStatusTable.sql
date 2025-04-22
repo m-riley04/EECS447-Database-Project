@@ -2,11 +2,11 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE spPopulateFeeStatusTable()
 BEGIN
-    INSERT INTO fee_status (name)
+    INSERT INTO fee_status (name, description)
     VALUES
-        ('Issued'),
-        ('Overdue'),
-        ('Paid');
+        ('Issued', 'The fee is issued to the user'),
+        ('Overdue', 'The fee is overdue its payment'),
+        ('Paid', 'The fee has been paid');
 END //
 
 DELIMITER ;

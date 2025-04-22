@@ -23,13 +23,9 @@ BEGIN
     (5, 1, 1, 'I, Robot', 1950, 1, '9780553294385'),
     (5, 1, 1, 'The Last Question', 1956, 1, '9781884214493'),
     (6, 2, 1, 'The Temptest', 1610, 1, '9780143128632'),
-    (6, 2, 1, 'Hamlet', 1603, 1, '9780143128625')
-    (7, );
+    (6, 2, 1, 'Hamlet', 1603, 1, '9780143128625');
 
 
 END //
-ALTER TABLE media_item ADD CONSTRAINT unique_isbn UNIQUE (isbn);
-
-CALL spPopulateMediaItemTable();
 
 DELIMITER;
