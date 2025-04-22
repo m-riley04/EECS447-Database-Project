@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE OR REPLACE PROCEDURE spPopulateMediaItemTable()
+CREATE OR  REPLACE PROCEDURE spPopulateMediaItemTable()
 BEGIN
     INSERT IGNORE INTO media_item (
         author_id,
@@ -24,7 +24,12 @@ BEGIN
     (5, 1, 1, 'The Last Question', 1956, 1, '9781884214493'),
     (6, 2, 1, 'The Temptest', 1610, 1, '9780143128632'),
     (6, 2, 1, 'Hamlet', 1603, 1, '9780143128625'),
-    (7, 6, 1, 'The Handmaid\'s Tale', 1985, 0, '9780385490818');
+    (7, 6, 1, 'The Handmaid\'s Tale', 1985, 0, '9780385490818'),
+    (7, 1, 1, 'Oryx and Crake', 2003, 1, '9780307398482'),
+    (8, 3, 1, 'A Game of Thrones', 1996, 0, '9780007428540'),
+    (8, 3, 1, 'A Clash of Kings', 1998, 1, ' 9781984821157'),
+    (9, 3, 1, 'Harry Potter and the Chamber of Secrets', 1998, 0, '9780439064866'),
+    (9, 3, 1, 'Fantastic Beasts and Where to Find Them', 2001, 1, '9781338216790');
 
 
 END //
