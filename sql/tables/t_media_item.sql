@@ -10,6 +10,6 @@ CREATE TABLE media_item (
     
     CONSTRAINT `fk_author_id` FOREIGN KEY (author_id) REFERENCES author(author_id),
     CONSTRAINT `fk_genre_id` FOREIGN KEY (genre_id) REFERENCES genre(genre_id),
-    CONSTRAINT `fk_media_type_id` FOREIGN KEY (media_type_id) REFERENCES media_type(media_type_id)
-    CONTRIANT unique_isbn UNIQUE (isbn)
+    CONSTRAINT `fk_media_type_id` FOREIGN KEY (media_type_id) REFERENCES media_type(media_type_id),
+    CONSTRAINT unique_isbn UNIQUE (isbn)
 );
