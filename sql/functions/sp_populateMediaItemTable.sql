@@ -27,9 +27,17 @@ BEGIN
     (7, 6, 1, 'The Handmaid\'s Tale', 1985, 0, '9780385490818'),
     (7, 1, 1, 'Oryx and Crake', 2003, 1, '9780307398482'),
     (8, 3, 1, 'A Game of Thrones', 1996, 0, '9780007428540'),
-    (8, 3, 1, 'A Clash of Kings', 1998, 1, ' 9781984821157'),
+    (8, 3, 1, 'A Clash of Kings', 1998, 1, '9781984821157'),
     (9, 3, 1, 'Harry Potter and the Chamber of Secrets', 1998, 0, '9780439064866'),
-    (9, 3, 1, 'Fantastic Beasts and Where to Find Them', 2001, 1, '9781338216790');
+    (9, 3, 1, 'Fantastic Beasts and Where to Find Them', 2001, 1, '9781338216790'),
+    (10, 6, 7, 'Silver Surfer: Parable', 1988, 1, '9780785162094'),
+    (10, 6, 7, 'Fantasic Four #1', 1961, 0, '9780785106661'),
+    (11, 6, 1, 'Night of the Living Dummy', 1993, 1, '9781407157443'),
+    (11, 6, 1, 'Welcome to Dead House', 1992, 0 , '9782227729025'),
+    (12, 4, 1, 'Along Came a Spider', 1993, 0, '9780316072915'),
+    (12, 4, 1, 'Cross', 2006, 1, '9780316017749'),
+    (13, 6, 1, 'The World According to Garp Novel', 1978, 0, '9780345366764'),
+    (13, 5, 1, 'The Cider House Rules', 1985, 1, '9780224023368');
 
 
 END;
