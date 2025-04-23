@@ -14,5 +14,8 @@ BEGIN
         (1, 1, 'Grace', 'Taylor', 'grace.taylor@gmail.com', '8901234567', 1),
         (1, 1, 'Henry', 'Anderson', 'henry.anderson@gmail.com', '9012345678', 0),
         (1, 1, 'Ivy', 'Thomas', 'ivy.thomas@gmail.com', '0123456789', 1);
-END; //
+END;
+
+CALL spPopulateUserTable();
+
 DELIMITER;

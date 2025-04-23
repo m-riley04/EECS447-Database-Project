@@ -12,5 +12,8 @@ BEGIN
         ('Journal'),
         ('Comic'),
         ('Graphic Novel');
-END; //
+END;
+
+CALL spPopulateMediaTypeTable();
+
 DELIMITER ;

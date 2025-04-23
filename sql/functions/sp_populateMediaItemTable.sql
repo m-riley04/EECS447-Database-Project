@@ -32,6 +32,8 @@ BEGIN
     (9, 3, 1, 'Fantastic Beasts and Where to Find Them', 2001, 1, '9781338216790');
 
 
-END //
+END;
+
+CALL spPopulateMediaItemTable();
 
 DELIMITER;
