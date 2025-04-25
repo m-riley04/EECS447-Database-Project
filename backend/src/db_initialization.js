@@ -1,3 +1,16 @@
+function normalizeBigInt(obj) {
+    if (Array.isArray(obj)) return obj.map(normalizeBigInt);
+
+    for (const k in obj) {
+        if (typeof obj[k] === 'bigint') {
+        // choose the representation you prefer
+        obj[k] = obj[k].toString();   // keeps full precision
+        // obj[k] = Number(obj[k]);   // loses precision > 2^53-1
+        }
+    }
+    return obj;
+}
+
 /**
  * Queries the database
  * @param {*} sql 
@@ -31,7 +44,7 @@ export async function update(sql, res, req, pool, params) {
     try {
         conn = await pool.getConnection();
         const rows = await conn.query(sql, params);
-        res.json(rows);
+        res.json(normalizeBigInt(rows));
     } catch (err) {
         res.status(500).json({ error: err.toString() });
     } finally {
@@ -217,8 +230,8 @@ export function initActionRequests(params) {
      * Action: Reset the database back to its initial state
      */
     app.post('/api/reset', async (req, res) => {
-        const sql = `CALL reset_database()`;
-        await query(sql, res, req, pool);
+        const sql = `CALL `;
+        await update(sql, res, req, pool);
     });
 
 
