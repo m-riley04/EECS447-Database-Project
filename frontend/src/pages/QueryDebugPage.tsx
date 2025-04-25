@@ -90,10 +90,19 @@ const QueryDebugPage = () => {
             });
     }
 
+    function handleCheckOutItem(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        const user_id = (document.getElementById('user_id') as HTMLInputElement).value;
+        const media_item_id = (document.getElementById('media_item_id') as HTMLInputElement).value;
+        console.log(`Checking out media item ${media_item_id} for user ${user_id}`);
+    }
+
     return (
         <>
             <h1>Query Debugging Page</h1>
             <p>This page is for debugging all of the different reports, queries, etc. for the database.</p>
+
+            <h2>Basic Table Query Testing</h2>
             <div style={{display: 'inline-flex', gap: '10px'}}>
                 <p>Table: </p>
                 <select title="table" onChange={(e) => setTable(parseInt(e.target.value))}>
@@ -116,7 +125,15 @@ const QueryDebugPage = () => {
             <button onClick={() => navigate('/')}>Back</button>
 
             <h2>Reports Testing</h2>
+            <h3>Get all checked out items</h3>
             <button onClick={handleCheckedOutItems}>Checked Out Items</button>
+
+            <h3>"Check out" media item for user</h3>
+            <form onSubmit={handleCheckOutItem}>
+                <input type="number" placeholder="user_id" id="user_id" />
+                <input type="number" placeholder="media_item_id" id="media_item_id" />
+                <button>Check Out</button>
+            </form>
         </>
     )
 }
