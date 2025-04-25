@@ -11,7 +11,59 @@ export async function fetchData(endpoint: string = '') {
 }
 
 export async function getCheckedOutItems(): Promise<MediaItemModel[]> {
-    const response = await fetch(`${SERVER_API_URL}/media_items/unavailable`);
+    const response = await fetch(`${SERVER_API_URL}/media_item/unavailable`);
+    const data = await response.json();
+    return data;
+}
+
+export async function checkoutMediaItem(itemId: number, userId: number) {
+    const response = await fetch(`${SERVER_API_URL}/media_item/checkout/${itemId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ user_id: userId })
+        }
+    );
+    const data = await response.json();
+    return data;
+}
+
+export async function returnMediaItem(itemId: number, userId: number) {
+    const response = await fetch(`${SERVER_API_URL}/media_item/return/${itemId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ user_id: userId })
+        }
+    );
+    const data = await response.json();
+    return data;
+}
+
+export async function payFee(feeId: number) {
+    const response = await fetch(`${SERVER_API_URL}/fee/pay/${feeId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+    const data = await response.json();
+    return data;
+}
+
+export async function resetDatabase() {
+    const response = await fetch(`${SERVER_API_URL}/reset`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
     const data = await response.json();
     return data;
 }

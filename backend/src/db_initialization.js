@@ -3,7 +3,7 @@
  * @param {*} sql 
  * @param {*} res 
  * @param {*} req 
- * @param {*} pool 
+ * @param {import('mariadb').Pool} pool
  */
 export async function query(sql, res, req, pool) {
     let conn;
@@ -17,6 +17,28 @@ export async function query(sql, res, req, pool) {
         if (conn) conn.release();
     }
 }
+
+/**
+ * Updates a row in the database
+ * @param {*} sql 
+ * @param {*} res 
+ * @param {*} req 
+ * @param {import('mariadb').Pool} pool
+ * @param {*} params
+ */
+export async function update(sql, res, req, pool, params) {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const rows = await conn.query(sql, params);
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.toString() });
+    } finally {
+        if (conn) conn.release();
+    }
+}
+
 
 /**
  * Initializes basic GET request endpoints for the server.
@@ -114,7 +136,7 @@ export function initBasicDELETERequests(params) {
 
 /**
  * Initializes the report requests for the server.
- * @param {*} params 
+ * @param {{ app: import('express').Express, pool: import('mariadb').Pool }} params
  */
 export function initReportRequests(params) {
     const { app, pool } = params;
@@ -122,14 +144,14 @@ export function initReportRequests(params) {
     /**
      * Report 1: Get all checked out media items
      */
-    app.get('/api/media_items/unavailable', async (req, res) => {
+    app.get('/api/media_item/unavailable', async (req, res) => {
         await query('SELECT * FROM media_item WHERE availability=False', res, req, pool);
     });
 
     /**
      * Report 2: Get all media items checked out by a user
      */
-    app.get('/api/media_items/:user_id', async (req, res) => {
+    app.get('/api/media_item/:user_id', async (req, res) => {
         const userId = req.params.user_id;
         await query(`SELECT * FROM media_item WHERE user_id=${userId};`, res, req, pool);
     });
@@ -147,6 +169,56 @@ export function initReportRequests(params) {
     app.get('/api/overdue_fees/:user_id', async (req, res) => {
         const userId = req.params.user_id;
         await query(`SELECT * FROM fee WHERE user_id=${userId} `, res, req, pool);
+    });
+
+
+}
+
+/**
+ * Initializes the request endpoints for "actions" that modify the database 
+ * @param {{ app: import('express').Express, pool: import('mariadb').Pool }} params
+ */
+export function initActionRequests(params) {
+    const { app, pool } = params;
+
+    /**
+     * Action: Check out a media item
+     */
+    app.post('/api/media_item/checkout/:id', async (req, res) => {
+        const mediaItemId = req.params.id;
+        const { user_id } = req.body;
+        const sql = `CALL spCheckoutMediaItem(?, ?);`;
+        const params = [mediaItemId, user_id];
+        await update(sql, res, req, pool, params);
+    });
+
+    /**
+     * Action: Return a media item
+     */
+    app.post('/api/media_item/return/:id', async (req, res) => {
+        const mediaItemId = req.params.id;
+        const { user_id } = req.body;
+        const sql = `CALL spReturnMediaItem(?, ?);`;
+        const params = [mediaItemId, user_id];
+        await update(sql, res, req, pool, params);
+    });
+
+    /**
+     * Action: Pay a fee
+     */
+    app.post('/api/fee/pay/:id', async (req, res) => {
+        const feeId = req.params.id;
+        const sql = `CALL spPayFee(?);`;
+        const params = [feeId];
+        await update(sql, res, req, pool, params);
+    });
+
+    /**
+     * Action: Reset the database back to its initial state
+     */
+    app.post('/api/reset', async (req, res) => {
+        const sql = `CALL reset_database()`;
+        await query(sql, res, req, pool);
     });
 
 
