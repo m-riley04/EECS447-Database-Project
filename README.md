@@ -18,6 +18,8 @@ There is a backend and a frontend that must be ran at the same time. There are 3
 2. Running `start.sh` (Unix/Linux/Git Bash only)
 3. Manually launching the frontend and backend (instructions can be found in the [frontend readme](frontend/README.md) and the [backend readme](backend/README.md))
 
+> NOTE: There is a strange bug sometimes where you must start and restart the server and client for the SSH to connect. You might also have to restart the server if/when the DB times out.
+
 # Dependencies
 - Node.js v23.5.0
 - Python 3.10+ (optional)
