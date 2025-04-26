@@ -42,9 +42,9 @@ export async function query(sql, res, req, pool) {
     try {
         conn = await pool.getConnection();
         const rows = await conn.query(sql);
-        res.json(normalizeBigInt(rows));
+        return res.json(normalizeBigInt(rows));
     } catch (err) {
-        res.status(500).json({ error: err.toString() });
+        return res.status(500).json({ error: err.toString() });
     } finally {
         if (conn) conn.release();
     }
@@ -63,14 +63,29 @@ export async function update(sql, res, req, pool, params) {
     try {
         conn = await pool.getConnection();
         const rows = await conn.query(sql, params);
-        res.json(normalizeBigInt(rows));
+        return res.json(normalizeBigInt(rows));
     } catch (err) {
-        res.status(500).json({ error: err.toString() });
+        return res.status(500).json({ error: err.toString() });
     } finally {
         if (conn) conn.release();
     }
 }
 
+/**
+ * Initializes the requests for managing the overall database (resetting, initializing, etc.).
+ * @param {{ app: import('express').Express, pool: import('mariadb').Pool }} params
+ */
+export function initOverallDatabaseRequests(params) {
+    const { app, pool } = params;
+
+    // Create all of the tables
+
+    // Drop all of the tables
+
+    // Create all of the stored procedures
+
+    // Populate the database with data (populate transaction)
+}
 
 /**
  * Initializes basic GET request endpoints for the server.
@@ -193,26 +208,32 @@ export function initMiscProceduresRequests(params) {
 export function initReportRequests(params) {
     const { app, pool } = params;
 
-    // Get all media items that are available
-    app.get('/api/media_item/unavailable', async (req, res) => {
+    // Get all media items that are unavailable
+    app.get('/api/media_item/checked_out', async (req, res) => {
         await query('SELECT * FROM media_item WHERE availability=False', res, req, pool);
     });
 
     // Get all media items checked out by a user
-    app.get('/api/media_item/:user_id', async (req, res) => {
+    app.get('/api/media_item/checked_out/:user_id', async (req, res) => {
         const userId = req.params.user_id;
-        await query(`SELECT * FROM media_item WHERE user_id=${userId};`, res, req, pool);
+        await query(`SELECT * FROM transaction WHERE user_id=${userId} AND return_date IS NULL;`, res, req, pool);
     });
 
-    // Get all overdue fees
-    app.get('/api/overdue_fees', async (req, res) => {
-        await query("SELECT * FROM fee WHERE fee_status=2", res, req, pool);
+    // Get all transactions by a user
+    app.get('/api/transaction/:user_id', async (req, res) => {
+        const userId = req.params.user_id;
+        await query(`SELECT * FROM transaction WHERE user_id=${userId};`, res, req, pool);
     });
 
     // Get all fees for a user
-    app.get('/api/overdue_fees/:user_id', async (req, res) => {
+    app.get('/api/fee/:user_id', async (req, res) => {
         const userId = req.params.user_id;
-        await query(`SELECT * FROM fee WHERE user_id=${userId} `, res, req, pool);
+        await query(`SELECT * FROM fee WHERE user_id=${userId}`, res, req, pool);
+    });
+
+    // Get all overdue fees
+    app.get('/api/fee/overdue', async (req, res) => {
+        await query("SELECT * FROM fee WHERE fee_status=2", res, req, pool);
     });
 
     // Get books by a specific author

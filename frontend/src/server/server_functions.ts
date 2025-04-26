@@ -30,6 +30,25 @@ export async function checkUserByEmail(email: string) {
     return data;
 }
 
+export async function getTransactionsByUserId(userId: number) {
+    const response = await fetch(`${SERVER_API_URL}/transaction/${userId}`);
+    const data = await response.json();
+    return data;
+}
+
+export async function getCheckedOutItemsByUserId(userId: number) {
+    const response = await fetch(`${SERVER_API_URL}/media_item/checked_out/${userId}`);
+    const data = await response.json();
+    return data;
+}
+
+export async function getFeesByUserId(userId: number) {
+    const response = await fetch(`${SERVER_API_URL}/fee/${userId}`);
+    const data = await response.json();
+    return data;
+}
+
+
 export async function getUserById(userId: number) {
     const response = await fetch(`${SERVER_API_URL}/user/${userId}`);
     const data = await response.json();
