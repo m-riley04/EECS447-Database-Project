@@ -6,6 +6,21 @@ import { AccountStatusEnum } from '../enums/AccountStatusEnum';
 import { MembershipTypeEnum } from '../enums/MembershipTypeEnum';
 
 /**
+ * Formats a phone number string to a standard format.
+ * @param phoneNumber A phone number string to format.
+ * @returns 
+ */
+function formatPhoneNumber(phoneNumber: string): string {
+    // Format the phone number to (XXX) XXX-XXXX
+    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+        return `(${match[1]}) ${match[2]}-${match[3]}`;
+    }
+    return phoneNumber;
+}
+
+/**
  * The home page of the application.
  */
 const HomePage = () => {
@@ -69,7 +84,7 @@ const HomePage = () => {
             <h2>My Account</h2>
                 <p><b>Name</b>: {user.first_name} {user.last_name}</p>
                 <p><b>Email</b>: {user.email}</p>
-                <p><b>Phone</b>: {user.phone}</p>
+                <p><b>Phone</b>: {formatPhoneNumber(user.phone)}</p>
                 <p><b>Account Status</b>: {AccountStatusEnum[user.account_status_id]}</p>
                 <p><b>Membership Type</b>: {MembershipTypeEnum[user.membership_type_id]}</p>
                 <p><b>Is Staff</b>: {user.is_staff ? "YES" : "NO"}</p>
