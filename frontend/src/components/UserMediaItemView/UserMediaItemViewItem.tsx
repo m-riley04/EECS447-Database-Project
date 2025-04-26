@@ -1,10 +1,10 @@
 import MediaItemModel from "../../models/MediaItemModel";
 
-interface MediaItemViewItemProps {
+interface UserMediaItemViewItemProps {
     mediaItem: MediaItemModel;
 }
 
-const TableListViewItem: React.FC<MediaItemViewItemProps> = ({
+const UserMediaItemViewItem: React.FC<UserMediaItemViewItemProps> = ({
     mediaItem
 }) => {
 
@@ -18,4 +18,4 @@ const TableListViewItem: React.FC<MediaItemViewItemProps> = ({
     )
 }
 
-export default TableListViewItem;
+export default UserMediaItemViewItem;

@@ -1,12 +1,14 @@
 import MediaItemModel from '../../models/MediaItemModel';
-import MediaItemViewItem from './MediaItemViewItem';
+import UserMediaItemViewItem from './UserMediaItemViewItem';
 
-interface MediaItemViewProps {
+interface UserMediaItemViewProps {
     mediaItems: MediaItemModel[];
+    userId: number;
 }
 
-const MediaItemView: React.FC<MediaItemViewProps> = ({
-    mediaItems
+const UserMediaItemView: React.FC<UserMediaItemViewProps> = ({
+    mediaItems,
+    userId
 }) => {
 
     return (
@@ -21,7 +23,7 @@ const MediaItemView: React.FC<MediaItemViewProps> = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {mediaItems?.map((item, index) => <MediaItemViewItem key={index} mediaItem={item} />)}
+                    {mediaItems?.map((item, index) => <UserMediaItemViewItem key={index} mediaItem={item} />)}
                 </tbody>
             </table>
             : <p>No media items to show.</p>
@@ -30,4 +32,4 @@ const MediaItemView: React.FC<MediaItemViewProps> = ({
     )
 }
 
-export default MediaItemView;
+export default UserMediaItemView;
