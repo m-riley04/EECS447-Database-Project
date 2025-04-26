@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import UserModel from '../models/UserModel';
 import { getUserById } from '../server/server_functions';
+import { AccountStatusEnum } from '../enums/AccountStatusEnum';
+import { MembershipTypeEnum } from '../enums/MembershipTypeEnum';
 
 /**
  * The home page of the application.
@@ -64,6 +66,17 @@ const HomePage = () => {
         <>
             <h1>Home</h1>
             <p>This is the blank home page of the application.</p>
+            <h2>My Account</h2>
+                <p><b>Name</b>: {user.first_name} {user.last_name}</p>
+                <p><b>Email</b>: {user.email}</p>
+                <p><b>Phone</b>: {user.phone}</p>
+                <p><b>Account Status</b>: {AccountStatusEnum[user.account_status_id]}</p>
+                <p><b>Membership Type</b>: {MembershipTypeEnum[user.membership_type_id]}</p>
+                <p><b>Is Staff</b>: {user.is_staff ? "YES" : "NO"}</p>
+            <h2>My Checked Out Items</h2>
+            <h2>My Fees</h2>
+            <h2>My Transactions</h2>
+            <h2>Actions</h2>
             <button onClick={() => navigate(`/staff/${userId}`)} hidden={!user.is_staff}>Staff</button>
             <button onClick={() => navigate(`/user/${userId}`)}>User</button>
             <button onClick={() => navigate('/')}>Logout</button>
