@@ -66,6 +66,7 @@ const HomePage = () => {
         getCheckedOutItemsByUserId(parseInt(userId))
             .then((response) => {
                 if (response.length > 0) {
+                    console.log(response);
                     setCheckedOutItems(response);
                 } else {
                     console.error(`No checked out items found for user ID ${userId}.`);
@@ -84,6 +85,7 @@ const HomePage = () => {
         getFeesByUserId(parseInt(userId))
             .then((response) => {
                 if (response.length > 0) {
+                    console.log(response);
                     setFees(response);
                 } else {
                     console.error(`No fees found for user ID ${userId}.`);

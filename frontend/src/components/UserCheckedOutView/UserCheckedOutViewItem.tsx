@@ -17,9 +17,9 @@ const UserCheckedOutViewItem: React.FC<UserCheckedOutViewItemProps> = ({
             <td>{transaction.transaction_id}</td>
             <td>{transaction.user_id}</td>
             <td>{transaction.media_id}</td>
-            <td>{transaction.checkout_date.toDateString()}</td>
-            <td>{transaction.due_date.toDateString()}</td>
-            <td>{transaction.return_date?.toDateString() ?? "N/A"}</td>
+            <td>{new Date(transaction.checkout_date).toDateString()}</td>
+            <td>{new Date(transaction.due_date).toDateString()}</td>
+            <td>{new Date(transaction.return_date ?? "").toDateString() ?? "N/A"}</td>
             <td>
                 <button 
                     onClick={() => onReturn(transaction.media_id)}

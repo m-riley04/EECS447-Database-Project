@@ -17,7 +17,7 @@ const UserMediaItemViewItem: React.FC<UserFeeViewItemProps> = ({
         <tr>
             <td>{fee.fee_id}</td>
             <td>{fee.user_id}</td>
-            <td>{fee.date_issued.toDateString()}</td>
+            <td>{new Date(fee.date_issued).toDateString()}</td>
             <td>{fee.amount}</td>
             <td>{FeeStatusEnum[fee.fee_status_id]}</td>
             <td>
