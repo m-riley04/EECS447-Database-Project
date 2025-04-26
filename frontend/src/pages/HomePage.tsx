@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import UserModel from '../models/UserModel';
-import { getUserById } from '../server/server_functions';
+import { getCheckedOutItemsByUserId, getFeesByUserId, getUserById } from '../server/server_functions';
 import { AccountStatusEnum } from '../enums/AccountStatusEnum';
 import { MembershipTypeEnum } from '../enums/MembershipTypeEnum';
 import UserCheckedOutView from '../components/UserCheckedOutView/UserCheckedOutView';
@@ -39,11 +39,7 @@ const HomePage = () => {
     const [transactions, setTransactions] = useState<TransactionModel[]>([]);
 
     function handleRefreshUser() {
-        if (!userId || userId === '0') {
-            console.error('User ID is not defined. Redirecting to login page.');
-            navigate('/login');
-            return;
-        }
+        if (!userId || userId === '0') return;
 
         // Get the user based from user id
         getUserById(parseInt(userId))
@@ -65,11 +61,39 @@ const HomePage = () => {
     }
 
     function handleRefreshCheckedOutItems() {
-        
+        if (!userId || userId === '0') return;
+
+        getCheckedOutItemsByUserId(parseInt(userId))
+            .then((response) => {
+                if (response.length > 0) {
+                    setCheckedOutItems(response);
+                } else {
+                    console.error(`No checked out items found for user ID ${userId}.`);
+                    setCheckedOutItems([]);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching checked out items:', error);
+                setCheckedOutItems([]);
+            });
     }
 
     function handleRefreshFees() {
-        
+        if (!userId || userId === '0') return;
+
+        getFeesByUserId(parseInt(userId))
+            .then((response) => {
+                if (response.length > 0) {
+                    setFees(response);
+                } else {
+                    console.error(`No fees found for user ID ${userId}.`);
+                    setFees([]);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching fees:', error);
+                setFees([]);
+            });
     }
 
     function handleRefreshTransactions() {

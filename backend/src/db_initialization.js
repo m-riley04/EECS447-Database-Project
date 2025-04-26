@@ -71,7 +71,6 @@ export async function update(sql, res, req, pool, params) {
     }
 }
 
-
 /**
  * Initializes basic GET request endpoints for the server.
  */
@@ -193,26 +192,32 @@ export function initMiscProceduresRequests(params) {
 export function initReportRequests(params) {
     const { app, pool } = params;
 
-    // Get all media items that are available
-    app.get('/api/media_item/unavailable', async (req, res) => {
+    // Get all media items that are unavailable
+    app.get('/api/media_item/checked_out', async (req, res) => {
         await query('SELECT * FROM media_item WHERE availability=False', res, req, pool);
     });
 
     // Get all media items checked out by a user
-    app.get('/api/media_item/:user_id', async (req, res) => {
+    app.get('/api/media_item/checked_out/:user_id', async (req, res) => {
         const userId = req.params.user_id;
-        await query(`SELECT * FROM media_item WHERE user_id=${userId};`, res, req, pool);
+        await query(`SELECT * FROM transaction WHERE user_id=${userId} AND return_date IS NULL;`, res, req, pool);
+    });
+
+    // Get all transactions by a user
+    app.get('/api/transaction/:user_id', async (req, res) => {
+        const userId = req.params.user_id;
+        await query(`SELECT * FROM transaction WHERE user_id=${userId};`, res, req, pool);
+    });
+
+    // Get all fees for a user
+    app.get('/api/fee/:user_id', async (req, res) => {
+        const userId = req.params.user_id;
+        await query(`SELECT * FROM fee WHERE user_id=${userId}`, res, req, pool);
     });
 
     // Get all overdue fees
     app.get('/api/overdue_fees', async (req, res) => {
         await query("SELECT * FROM fee WHERE fee_status=2", res, req, pool);
-    });
-
-    // Get all fees for a user
-    app.get('/api/overdue_fees/:user_id', async (req, res) => {
-        const userId = req.params.user_id;
-        await query(`SELECT * FROM fee WHERE user_id=${userId} `, res, req, pool);
     });
 
     // Get books by a specific author
