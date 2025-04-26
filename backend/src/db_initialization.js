@@ -42,7 +42,7 @@ export async function query(sql, res, req, pool) {
     try {
         conn = await pool.getConnection();
         const rows = await conn.query(sql);
-        res.json(rows);
+        res.json(normalizeBigInt(rows));
     } catch (err) {
         res.status(500).json({ error: err.toString() });
     } finally {
@@ -164,6 +164,20 @@ export function initBasicPOSTRequests(params) {
 export function initBasicDELETERequests(params) {
     const { app, pool } = params;
     /// TODO: Implement this function
+}
+
+/**
+ * Initializes the miscellaneous stored procedure requests for the server.
+ * @param {{ app: import('express').Express, pool: import('mariadb').Pool }} params
+ */
+export function initMiscProceduresRequests(params) {
+    const { app, pool } = params;
+
+    // Check for user by an email
+    app.get('/api/user/email/:email', async (req, res) => {
+        const email = req.params.email;
+        await query(`CALL spCheckUserByEmail('${email}', @a); SELECT @a AS user_id;`, res, req, pool); // NOTE: This is probably not safe, but this isn't a real production app
+    });
 }
 
 /**

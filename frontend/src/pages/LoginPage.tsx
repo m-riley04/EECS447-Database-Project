@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { checkUserByEmail } from '../server/server_functions';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -9,10 +10,21 @@ const LoginPage = () => {
         // Get email field value
         const email = (event.target as HTMLFormElement).email.value;
 
-        /// TODO: Check if email is in users list
-
-        console.log(`Login form submitted with email '${email}'`);
-        navigate("/home");
+        // Check if user exists
+        checkUserByEmail(email)
+            .then((response) => {
+                if (response.user_id) {
+                    console.log(`User with email '${email}' exists.`);
+                    navigate("/home");
+                } else {
+                    console.error(`User with email '${email}' does not exist.`);
+                    alert("User not found. Please create an account.");
+                }
+            })
+            .catch((error) => {
+                console.error('Error checking user:', error);
+                alert("An error occurred while checking the user. Please try again.");
+            });
     }   
 
     return (

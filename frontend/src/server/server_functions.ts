@@ -16,6 +16,20 @@ export async function getCheckedOutItems(): Promise<MediaItemModel[]> {
     return data;
 }
 
+export async function checkUserByEmail(email: string) {
+    const response = await fetch(`${SERVER_API_URL}/user/email/${email}`);
+    const data = await response.json();
+
+    // Very stupid logic, I know.
+    if (data.length > 1) {
+        if (data[1].length > 0) {
+            return data[1][0];
+        }
+    }
+
+    return data;
+}
+
 export async function checkoutMediaItem(itemId: number, userId: number) {
     const response = await fetch(`${SERVER_API_URL}/media_item/checkout/${itemId}`,
         {
