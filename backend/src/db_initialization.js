@@ -72,6 +72,22 @@ export async function update(sql, res, req, pool, params) {
 }
 
 /**
+ * Initializes the requests for managing the overall database (resetting, initializing, etc.).
+ * @param {{ app: import('express').Express, pool: import('mariadb').Pool }} params
+ */
+export function initOverallDatabaseRequests(params) {
+    const { app, pool } = params;
+
+    // Create all of the tables
+
+    // Drop all of the tables
+
+    // Create all of the stored procedures
+
+    // Populate the database with data (populate transaction)
+}
+
+/**
  * Initializes basic GET request endpoints for the server.
  */
 export function initBasicGETRequests(params) {
@@ -216,7 +232,7 @@ export function initReportRequests(params) {
     });
 
     // Get all overdue fees
-    app.get('/api/overdue_fees', async (req, res) => {
+    app.get('/api/fee/overdue', async (req, res) => {
         await query("SELECT * FROM fee WHERE fee_status=2", res, req, pool);
     });
 

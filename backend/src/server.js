@@ -15,6 +15,8 @@ const port = process.env.SERVER_PORT || 3001;
 // Initialize SSH tunnel
 await openTunnel();
 
+// TODO: If the tunnel isn't open, exit the program
+
 // Initialize MariaDB connection pool
 console.log('Connecting to MariaDB database...');
 const pool = createPool({
