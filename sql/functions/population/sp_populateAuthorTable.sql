@@ -16,7 +16,10 @@ BEGIN
         ('Stan', 'Lee'),
         ('R.L.', 'Stine'),
         ('James', 'Patterson'),
-        ('John', 'Irving');
+        ('John', 'Irving'),
+        ('Edmundo' ,'Paz Soldán'),
+        ('Mel', 'Robbins'),
+        ('Cook\'s', 'Illustrated');
 
 END; 
 

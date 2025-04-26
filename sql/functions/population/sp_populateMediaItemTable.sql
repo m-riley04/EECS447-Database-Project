@@ -37,7 +37,10 @@ BEGIN
     (12, 4, 1, 'Along Came a Spider', 1993, 0, '9780316072915'),
     (12, 4, 1, 'Cross', 2006, 1, '9780316017749'),
     (13, 6, 1, 'The World According to Garp Novel', 1978, 0, '9780345366764'),
-    (13, 5, 1, 'The Cider House Rules', 1985, 1, '9780224023368');
+    (13, 5, 1, 'The Cider House Rules', 1985, 1, '9780224023368'),
+    (14, 4, 2, 'Turing\'s Delirium', 2007, 1 , '9780618872596'),
+    (15, 7, 3, 'The Let Them Theory', 2024, 1, '9798347762248'),
+    (16, 7, 4, 'The Cook\'s Illustrated Cookbook', 2011, 1, '9781936493135');
 
 
 END;
