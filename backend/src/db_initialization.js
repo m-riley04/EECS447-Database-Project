@@ -42,9 +42,9 @@ export async function query(sql, res, req, pool) {
     try {
         conn = await pool.getConnection();
         const rows = await conn.query(sql);
-        res.json(normalizeBigInt(rows));
+        return res.json(normalizeBigInt(rows));
     } catch (err) {
-        res.status(500).json({ error: err.toString() });
+        return res.status(500).json({ error: err.toString() });
     } finally {
         if (conn) conn.release();
     }
@@ -63,9 +63,9 @@ export async function update(sql, res, req, pool, params) {
     try {
         conn = await pool.getConnection();
         const rows = await conn.query(sql, params);
-        res.json(normalizeBigInt(rows));
+        return res.json(normalizeBigInt(rows));
     } catch (err) {
-        res.status(500).json({ error: err.toString() });
+        return res.status(500).json({ error: err.toString() });
     } finally {
         if (conn) conn.release();
     }

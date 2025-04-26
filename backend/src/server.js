@@ -1,10 +1,9 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-import { createTunnel } from 'tunnel-ssh';
 import { createPool } from 'mariadb';
 import { initBasicGETRequests, initBasicPUTRequests, initBasicPOSTRequests, initBasicDELETERequests, initReportRequests, initActionRequests, initMiscProceduresRequests } from './db_initialization.js';
-import { sshConfig, serverConfig, tunnelConfig, forwardConfig } from './ssh_initialization.js';
+import { LOCAL_DB_PORT, openTunnel } from './ssh_initialization.js';
 
 // Configure the .env
 dotenv.config();
@@ -14,20 +13,22 @@ const app = express();
 const port = process.env.SERVER_PORT || 3001;
 
 // Initialize SSH tunnel
-const [server, conn] = await createTunnel(tunnelConfig, serverConfig, sshConfig, forwardConfig);
+await openTunnel();
 
 // Initialize MariaDB connection pool
+console.log('Connecting to MariaDB database...');
 const pool = createPool({
   host: process.env.SERVER_HOST || 'localhost',
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: Number(process.env.DB_PORT),
-  connectionLimit: 5,
+  port: LOCAL_DB_PORT,
+
   bigIntAsNumber: true,
   multipleStatements: true, // NOTE: This is not secure, but this is not a real production app with sensitive data
-  idleTimeout: 0 // NOTE: This is so that the connection pool doesn't close after a period of inactivity. In a prod env, maybe change this to just refresh the pool.
+  keepAliveDelay: 10000,
 });
+console.log('MariaDB connected.');
 
 // Initialize CORS and app
 app.use(cors()); // NOTE: This is much less secure, but this is not a real production app with sensitive data.
@@ -46,4 +47,14 @@ initMiscProceduresRequests(params);
 // Initialize listening port
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
+});
+
+// Catch unhandled errors
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  // the tunnel layer already schedules a reconnect; just keep running
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Promise:', reason);
 });
