@@ -1,11 +1,76 @@
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import UserModel from '../models/UserModel';
+import { getUserById } from '../server/server_functions';
 
 const StaffPage = () => {
     const navigate = useNavigate();
+    const { userId } = useParams<{ userId: string }>();
+
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<UserModel | null>(null);
+    
+    // On page load...
+    useEffect(() => {
+        if (!userId || userId === '0') {
+            console.error('User ID is not defined. Redirecting to login page.');
+            navigate('/login');
+            return;
+        }
+
+        // Get the user based from user id
+        getUserById(parseInt(userId))
+            .then((response) => {
+                if (response.length > 0) {
+                    setUser(response[0]);
+                } else {
+                    console.error(`User with ID ${userId} not found.`);
+                    setUser(null);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching user:', error);
+                setUser(null);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+        
+    }, [])
+
+    if (loading) {
+        return (
+            <>
+                <h1>Loading...</h1>
+                <p>Please wait while we load the page and user data.</p>
+            </>
+        )
+    }
+
+    if (!user) {
+        return (
+            <>
+                <h1>Error</h1>
+                <p>Could not find user with id {userId}.</p>
+                <button onClick={() => navigate('/')}>Logout</button>
+            </>
+        )
+    }
+
+    if (!user.is_staff) {
+        return (
+            <>
+                <h1>Error</h1>
+                <p>You do not have permission to access this page.</p>
+                <button onClick={() => navigate(`/home/${userId}`)}>Home</button>
+            </>
+        )
+    }
+
     return (
         <>
             <h1>Staff</h1>
-            <button onClick={() => navigate('/home')}>Home</button>
+            <button onClick={() => navigate(`/home/${userId}`)}>Home</button>
         </>
     )
 }

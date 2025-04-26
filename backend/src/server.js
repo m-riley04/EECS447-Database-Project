@@ -25,11 +25,12 @@ const pool = createPool({
   port: Number(process.env.DB_PORT),
   connectionLimit: 5,
   bigIntAsNumber: true,
-  multipleStatements: true // NOTE: This is not secure, but this is not a real production app with sensitive data
+  multipleStatements: true, // NOTE: This is not secure, but this is not a real production app with sensitive data
+  idleTimeout: 0 // NOTE: This is so that the connection pool doesn't close after a period of inactivity. In a prod env, maybe change this to just refresh the pool.
 });
 
 // Initialize CORS and app
-app.use(cors()); // NODE: This is much less secure
+app.use(cors()); // NOTE: This is much less secure, but this is not a real production app with sensitive data.
 app.use(express.json());
 
 ///========= REQUEST INITIALIZATIONS ==========///

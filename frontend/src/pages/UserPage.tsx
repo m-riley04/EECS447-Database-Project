@@ -1,10 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import MediaItemView from '../components/MediaItemView/MediaItemView';
 import { useEffect, useState } from 'react';
 import { fetchData } from '../server/server_functions';
 
 const UserPage = () => {
     const navigate = useNavigate();
+    const { userId } = useParams<{ userId: string }>();
 
     const [mediaItems, setMediaItems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -31,7 +32,7 @@ const UserPage = () => {
             { error ? <p>Error: {error}</p> : null }
             <p>Status: {loading ? "Loading..." : "Idle"}</p>
             <MediaItemView mediaItems={mediaItems ?? []} />
-            <button onClick={() => navigate('/home')}>Home</button>
+            <button onClick={() => navigate(`/home/${userId}`)}>Home</button>
         </>
     )
 }

@@ -15,7 +15,7 @@ const LoginPage = () => {
             .then((response) => {
                 if (response.user_id) {
                     console.log(`User with email '${email}' exists.`);
-                    navigate("/home");
+                    navigate(`/home/${response.user_id}`);
                 } else {
                     console.error(`User with email '${email}' does not exist.`);
                     alert("User not found. Please create an account.");

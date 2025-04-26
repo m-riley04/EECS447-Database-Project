@@ -140,6 +140,12 @@ export function initBasicGETRequests(params) {
     app.get('/api/membership_type', async (req, res) => {
         await query('SELECT * FROM membership_type', res, req, pool);
     });
+
+    // Get user by ID
+    app.get('/api/user/:id', async (req, res) => {
+        const userId = req.params.id;
+        await query(`SELECT * FROM user WHERE user_id=${userId}`, res, req, pool);
+    });
 }
 
 /**
