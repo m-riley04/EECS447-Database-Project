@@ -4,6 +4,10 @@ import UserModel from '../models/UserModel';
 import { getUserById } from '../server/server_functions';
 import { AccountStatusEnum } from '../enums/AccountStatusEnum';
 import { MembershipTypeEnum } from '../enums/MembershipTypeEnum';
+import UserCheckedOutView from '../components/UserCheckedOutView/UserCheckedOutView';
+import TransactionModel from '../models/TransactionModel';
+import FeeModel from '../models/FeeModel';
+import UserFeeView from '../components/UserFeeView/UserFeeView';
 
 /**
  * Formats a phone number string to a standard format.
@@ -28,10 +32,13 @@ const HomePage = () => {
     const { userId } = useParams<{ userId: string }>();
 
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState<UserModel | null>(null);
 
-    // On page load...
-    useEffect(() => {
+    const [user, setUser] = useState<UserModel | null>(null);
+    const [checkedOutItems, setCheckedOutItems] = useState<TransactionModel[]>([]);
+    const [fees, setFees] = useState<FeeModel[]>([]);
+    const [transactions, setTransactions] = useState<TransactionModel[]>([]);
+
+    function handleRefreshUser() {
         if (!userId || userId === '0') {
             console.error('User ID is not defined. Redirecting to login page.');
             navigate('/login');
@@ -55,8 +62,33 @@ const HomePage = () => {
             .finally(() => {
                 setLoading(false);
             });
+    }
+
+    function handleRefreshCheckedOutItems() {
         
+    }
+
+    function handleRefreshFees() {
+        
+    }
+
+    function handleRefreshTransactions() {
+
+    }
+
+    // On page load...
+    useEffect(() => {
+        handleRefreshUser();
+        handleRefreshCheckedOutItems();
+        handleRefreshFees();
+        handleRefreshTransactions();
     }, [])
+
+    if (!userId || userId === '0') {
+        console.error('User ID is not defined. Redirecting to login page.');
+        navigate('/login');
+        return;
+    }
 
     if (loading) {
         return (
@@ -89,8 +121,11 @@ const HomePage = () => {
                 <p><b>Membership Type</b>: {MembershipTypeEnum[user.membership_type_id]}</p>
                 <p><b>Is Staff</b>: {user.is_staff ? "YES" : "NO"}</p>
             <h2>My Checked Out Items</h2>
+                <UserCheckedOutView userId={parseInt(userId)} refreshItems={handleRefreshCheckedOutItems} transactions={checkedOutItems} />
             <h2>My Fees</h2>
+                <UserFeeView userId={parseInt(userId)} refreshItems={handleRefreshFees} fees={fees} />
             <h2>My Transactions</h2>
+
             <h2>Actions</h2>
             <button onClick={() => navigate(`/staff/${userId}`)} hidden={!user.is_staff}>Staff</button>
             <button onClick={() => navigate(`/user/${userId}`)}>User</button>
