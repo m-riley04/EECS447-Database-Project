@@ -7,6 +7,7 @@ CREATE OR REPLACE PROCEDURE spCheckoutMediaItem(
 BEGIN
     -- Declare variables
     DECLARE user_checkout_count INT;
+    DECLARE user_borrowing_limit INT DEFAULT 5;
     DECLARE media_available TINYINT;
 
     -- Check if the media item is available
@@ -20,12 +21,18 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Media item is not available for checkout.';
     END IF;
 
-    -- Check if the user doesn't have 5 items check out already
+    -- Get the user's borrowing limit from membership TYPE
+    SELECT borrowing_limit INTO user_borrowing_limit
+    FROM membership_type mt
+    JOIN user u ON mt.membership_type_id = u.membership_type_id
+    WHERE u.user_id = p_user_id;
+
+    -- Check if the user hasn't exceeded their borrowing limit
     SELECT COUNT(*) INTO user_checkout_count
     FROM `transaction`
     WHERE user_id = p_user_id AND return_date IS NULL; -- Only count items that are currently checked out
 
-    IF user_checkout_count >= 5 THEN
+    IF user_checkout_count >= user_borrowing_limit THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User has already checked out the maximum number of items.';
     END IF;
 
