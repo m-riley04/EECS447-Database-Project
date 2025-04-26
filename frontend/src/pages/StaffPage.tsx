@@ -72,6 +72,18 @@ const StaffPage = () => {
     return (
         <>
             <h1>Staff</h1>
+
+            <h2>Users</h2>
+
+            <h2>Fees</h2>
+
+            <h3>Overdue Fees</h3>
+
+            <h2>Checked Out Items</h2>
+
+            <h2>Actions</h2>
+            <button>Refresh User</button>
+            <button>Refresh Tables</button>
             <button onClick={() => navigate(`/home/${userId}`)}>Home</button>
         </>
     )
