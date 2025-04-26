@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import MediaItemView from '../components/MediaItemView/MediaItemView';
+import UserMediaItemView from '../components/UserMediaItemView/UserMediaItemView';
 import { useEffect, useState } from 'react';
 import { fetchData, getUserById } from '../server/server_functions';
 import CheckoutForm from '../components/CheckoutForm/CheckoutForm';
@@ -115,8 +115,11 @@ const UserPage = () => {
             <h1>User</h1>
             { error ? <p>Error: {error}</p> : null }
             <p>Status: {loading ? "Loading..." : "Idle"}</p>
-            <MediaItemView mediaItems={mediaItems ?? []} />
-            <CheckoutForm userId={parseInt(userId)} />
+            <UserMediaItemView 
+                mediaItems={mediaItems ?? []}
+                userId={parseInt(userId)}
+                refreshItems={handleRefreshMediaItems}
+            />
             <button onClick={handleRefreshUser}>Refresh User</button>
             <button onClick={handleRefreshMediaItems}>Refresh Media Items</button>
             <button onClick={() => navigate(`/home/${userId}`)}>Home</button>
