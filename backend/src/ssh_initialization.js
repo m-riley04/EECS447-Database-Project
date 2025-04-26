@@ -30,39 +30,51 @@ export const forwardConfig = {
     dstPort: Number(process.env.DB_PORT) || 3306,
 };
 
-let tunnelServer, sshConn, opening;
+
+let tunnelServer = null;
+let sshConn      = null;
+let openPromise  = null;
+let retryTimer   = null;
+let backoffMs    = 5_000;               // start at 5 s
+
+function scheduleReconnect() {
+    if (retryTimer) return; // already queued
+    console.log('Scheduling SSH tunnel reconnect...');
+    retryTimer = setTimeout(() => {
+        retryTimer = null;
+        openTunnel();
+    }, backoffMs);
+    backoffMs = Math.min(backoffMs + 5_000, 30_000);   // linear back-off
+}
 
 export async function openTunnel(attempt = 0) {
-  if (opening) return opening;             // another call is already in flight
-  console.log('SSH tunnel opening...');
+    if (sshConn && sshConn._ready) return openPromise;
+    if (openPromise)               return openPromise;
+    console.log('SSH tunnel opening...');
 
-  opening = (async () => {
-    // 1. cleanly close any previous listener
-    if (tunnelServer) {
-      await new Promise(res => tunnelServer.close(res));
-      tunnelServer = null;
-    }
+    openPromise = (async () => {
+        // cleanly close any previous listener
+        if (tunnelServer) await new Promise(res => tunnelServer.close(res));
 
-    // 2. establish a fresh tunnel
-    [tunnelServer, sshConn] =
-      await createTunnel(tunnelConfig, serverConfig, sshConfig, forwardConfig);
+        // establish a fresh tunnel
+        [tunnelServer, sshConn] =
+            await createTunnel(tunnelConfig, serverConfig, sshConfig, forwardConfig);
 
-    console.log(`SSH tunnel ready on ${process.env.SERVER_HOST || 'localhost'}:${LOCAL_DB_PORT}`);
+        sshConn._ready = true;              // mark as live
+        backoffMs = 5_000;                  // reset back-off
+        console.log(`SSH tunnel ready on ${process.env.SERVER_HOST || 'localhost'}:${LOCAL_DB_PORT}`);
 
-    // 3. reconnect logic
-    const retry = (err) => {
-      console.error('SSH tunnel dropped:', err?.message ?? 'unknown');
-      setTimeout(() => openTunnel(), Math.min(30_000, 5_000 * ++attempt));
-    };
+        // on error just log; on close trigger a reconnect
+        sshConn.on('error',  (e)=>console.error('SSH tunnel error:', e.message));
+        sshConn.once('close',() => {
+            console.warn('SSH tunnel closed');
+            sshConn._ready = false;
+            scheduleReconnect();
+        });
+    })().catch(err => {
+        console.error('SSH tunnel opening failed:', err.message);
+        scheduleReconnect();
+    }).finally(() => openPromise = null);
 
-    sshConn.once('error', retry).once('close', retry);
-
-    opening = null; // we’re live again
-  })().catch(err => {
-    opening = null;
-    console.error('SSH tunnel opening failed:', err.message);
-    setTimeout(() => openTunnel(), Math.min(30_000, 5_000 * ++attempt)); // Exponentially retry
-  });
-
-  return opening;
+    return openPromise;
 }
