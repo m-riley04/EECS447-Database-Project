@@ -1,3 +1,7 @@
+import { readFileSync } from 'fs';
+
+const SQL_DIRECTORY_PATH = '../sql';
+
 function normalizeBigInt(obj) {
     if (Array.isArray(obj)) return obj.map(normalizeBigInt);
 
@@ -9,6 +13,21 @@ function normalizeBigInt(obj) {
         }
     }
     return obj;
+}
+
+/**
+ * Reads a SQL file and returns its content. Returns an empty string if the file does not exist (and logs an error).
+ * @param {*} filePath 
+ */
+function readSQLFile(filePath) {
+    let data = "";
+    try {
+        data = readFileSync(`${SQL_DIRECTORY_PATH}/${filePath}`, 'utf8');
+    } catch (err) {
+        console.error("An error occurred when reading SQL file:", err);
+    }
+
+    return data;
 }
 
 /**
@@ -154,36 +173,54 @@ export function initBasicDELETERequests(params) {
 export function initReportRequests(params) {
     const { app, pool } = params;
 
-    /**
-     * Report 1: Get all checked out media items
-     */
+    // Get all media items that are available
     app.get('/api/media_item/unavailable', async (req, res) => {
         await query('SELECT * FROM media_item WHERE availability=False', res, req, pool);
     });
 
-    /**
-     * Report 2: Get all media items checked out by a user
-     */
+    // Get all media items checked out by a user
     app.get('/api/media_item/:user_id', async (req, res) => {
         const userId = req.params.user_id;
         await query(`SELECT * FROM media_item WHERE user_id=${userId};`, res, req, pool);
     });
 
-    /**
-     * Report 3: Get all overdue fees
-     */
+    // Get all overdue fees
     app.get('/api/overdue_fees', async (req, res) => {
         await query("SELECT * FROM fee WHERE fee_status=2", res, req, pool);
     });
 
-    /**
-     * Report 4: Get all fees for a user
-     */
+    // Get all fees for a user
     app.get('/api/overdue_fees/:user_id', async (req, res) => {
         const userId = req.params.user_id;
         await query(`SELECT * FROM fee WHERE user_id=${userId} `, res, req, pool);
     });
 
+    // Get books by a specific author
+    app.get('/api/media_item/author/:author_id', async (req, res) => {
+        const authorId = req.params.author_id;
+        await query(readSQLFile("reports/report_books_by_author.sql"), res, req, pool);
+    });
+
+    // Get all media items by a specific genre
+    app.get('/api/media_item/genre/:genre_id', async (req, res) => {
+        const genreId = req.params.genre_id;
+        await query(readSQLFile("reports/report_books_by_genre.sql"), res, req, pool);
+    });
+
+    // Get all client fines
+    app.get('/api/client_fines', async (req, res) => {
+        await query(readSQLFile("reports/report_client_fines.sql"), res, req, pool);
+    });
+
+    // Get all fees by fee status
+    app.get('/api/fees/fee_status', async (req, res) => {
+        await query(readSQLFile("reports/report_fees_by_status.sql"), res, req, pool);
+    });
+
+    // Users with overdue fees
+    app.get('/api/users/overdue_fees', async (req, res) => {
+        await query(readSQLFile("reports/report_users_with_overdue_fees.sql"), res, req, pool);
+    });
 
 }
 

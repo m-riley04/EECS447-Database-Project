@@ -21,6 +21,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "fs": "^0.0.1-security",
     "mariadb": "^3.4.1",
     "tunnel-ssh": "^5.2.0"
   }
