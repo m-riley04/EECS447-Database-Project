@@ -12,11 +12,7 @@ const StaffPage = () => {
     
     // On page load...
     useEffect(() => {
-        if (!userId || userId === '0') {
-            console.error('User ID is not defined. Redirecting to login page.');
-            navigate('/login');
-            return;
-        }
+        if (!userId || userId === '0') return;
 
         // Get the user based from user id
         getUserById(parseInt(userId))
@@ -37,6 +33,12 @@ const StaffPage = () => {
             });
         
     }, [])
+
+    if (!userId || userId === '0') {
+        console.error('User ID is not defined. Redirecting to login page.');
+        navigate('/login');
+        return;
+    }
 
     if (loading) {
         return (
