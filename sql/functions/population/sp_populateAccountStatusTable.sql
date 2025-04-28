@@ -9,7 +9,4 @@ BEGIN
         ('Inactive', 'A member who has not been active for a while'),
         ('Banned', 'Member has been banned');
 END //
-
-
-CALL spPopulateAccountStatusTable();
 DELIMITER ;

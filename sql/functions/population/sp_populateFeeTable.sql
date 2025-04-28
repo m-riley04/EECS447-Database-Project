@@ -18,6 +18,4 @@ BEGIN
 
 END;
 
-CALL spPopulateFeeTable();
-
 DELIMITER;

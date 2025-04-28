@@ -23,6 +23,4 @@ BEGIN
 
 END; 
 
-CALL spPopulateAuthorTable();
-
 DELIMITER ;
