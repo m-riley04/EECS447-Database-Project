@@ -2,7 +2,7 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE spPopulateAccountStatusTable()
 BEGIN
-    INSERT INTO account_status (status_name, status_description)
+    INSERT IGNORE INTO account_status (status_name, status_description)
     VALUES
         ('New', 'A recently new member'),
         ('Active', 'An active member'),

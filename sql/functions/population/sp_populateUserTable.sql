@@ -2,7 +2,7 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE spPopulateUserTable()
 BEGIN
-    INSERT INTO `user` (membership_type_id, account_status_id, first_name, last_name, email, phone, is_staff)
+    INSERT IGNORE INTO `user` (membership_type_id, account_status_id, first_name, last_name, email, phone, is_staff)
     VALUES
         (1, 1, 'John', 'Doe', 'john.doe@gmail.com', '1234567890', 0),
         (1, 2, 'Jane', 'Smith', 'jane.smith@gmail.com', '2345678901', 1),

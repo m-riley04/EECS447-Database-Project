@@ -2,7 +2,7 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE spPopulateGenreTable()
 BEGIN
-    INSERT INTO genre (name)
+    INSERT IGNORE INTO genre (name)
     VALUES
         ('Sci-Fi'),
         ('Romance'),

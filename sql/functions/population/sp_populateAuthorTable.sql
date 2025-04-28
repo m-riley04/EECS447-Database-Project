@@ -2,7 +2,7 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE spPopulateAuthorTable()
 BEGIN
-    INSERT INTO author (first_name, last_name)
+    INSERT IGNORE INTO author (first_name, last_name)
     VALUES
         ('George', 'Orwell'),
         ('Stephen', 'King'),

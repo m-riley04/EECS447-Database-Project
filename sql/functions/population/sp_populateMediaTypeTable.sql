@@ -2,7 +2,7 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE spPopulateMediaTypeTable()
 BEGIN
-    INSERT INTO media_type (media_type_name)
+    INSERT IGNORE INTO media_type (media_type_name)
     VALUES
         ('Book'),
         ('Ebook'),
