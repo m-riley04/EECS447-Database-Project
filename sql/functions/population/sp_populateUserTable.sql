@@ -16,6 +16,4 @@ BEGIN
         (3, 2, 'Ivy', 'Thomas', 'ivy.thomas@gmail.com', '0123456789', 1);
 END;
 
-CALL spPopulateUserTable();
-
 DELIMITER;

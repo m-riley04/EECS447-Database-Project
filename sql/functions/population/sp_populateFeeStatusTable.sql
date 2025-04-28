@@ -9,6 +9,4 @@ BEGIN
         ('Paid', 'The fee has been paid');
 END;
 
-CALL spPopulateFeeStatusTable();
-
 DELIMITER ;

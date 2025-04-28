@@ -14,6 +14,4 @@ BEGIN
         ('Graphic Novel');
 END;
 
-CALL spPopulateMediaTypeTable();
-
 DELIMITER ;

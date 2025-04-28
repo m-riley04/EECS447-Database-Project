@@ -45,6 +45,4 @@ BEGIN
 
 END;
 
-CALL spPopulateMediaItemTable();
-
 DELIMITER;

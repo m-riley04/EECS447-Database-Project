@@ -14,6 +14,4 @@ BEGIN
         ('Poetry');
 END;
 
-CALL spPopulateGenreTable();
-
 DELIMITER;
