@@ -134,6 +134,13 @@ export function initBasicGETRequests(params) {
     app.get('/api/fee_status', async (req, res) => {
         await query('SELECT * FROM fee_status', res, req, pool);
     });
+
+    /**
+     * Gets all fees
+     */
+    app.get('/api/fee', async (req, res) => {
+        await query('SELECT * FROM fee', res, req, pool);
+    });
     
     /**
      * Gets all media types
@@ -218,32 +225,11 @@ export function initReportRequests(params) {
         const userId = req.params.user_id;
         await query(`SELECT * FROM transaction WHERE user_id=${userId} AND return_date IS NULL;`, res, req, pool);
     });
-
-    // Get all transactions
-    app.get('/api/transaction', async (req, res) => {
-        await query(`SELECT * FROM transaction;`, res, req, pool);
-    });
-
+    
     // Get all transactions by a user
     app.get('/api/transaction/:user_id', async (req, res) => {
         const userId = req.params.user_id;
         await query(`SELECT * FROM transaction WHERE user_id=${userId};`, res, req, pool);
-    });
-
-    // Get all fees
-    app.get('/api/fee', async (req, res) => {
-        await query(`SELECT * FROM fee`, res, req, pool);
-    });
-
-    // Get all overdue fees
-    app.get('/api/fee/overdue', async (req, res) => {
-        await query("SELECT * FROM fee WHERE fee_status_id=2;", res, req, pool);
-    });
-
-    // Get all fees for a user
-    app.get('/api/fee/:user_id', async (req, res) => {
-        const userId = req.params.user_id;
-        await query(`SELECT * FROM fee WHERE user_id=${userId};`, res, req, pool);
     });
 
     // Get books by a specific author
@@ -263,10 +249,7 @@ export function initReportRequests(params) {
         await query(readSQLFile("reports/report_client_fines.sql"), res, req, pool);
     });
 
-    // Get all fees by fee status
-    app.get('/api/fees/fee_status', async (req, res) => {
-        await query(readSQLFile("reports/report_fees_by_status.sql"), res, req, pool);
-    });
+    
 
     // Users with overdue fees
     app.get('/api/users/overdue_fees', async (req, res) => {
@@ -282,13 +265,7 @@ export function initReportRequests(params) {
 export function initActionRequests(params) {
     const { app, pool } = params;
 
-    /**
-     * Action: Check and update fee statuses
-     */
-    app.post('/api/fee/check', async (req, res) => {
-        const sql = `CALL spCheckFees();`;
-        await update(sql, res, req, pool);
-    });
+    
 
     /**
      * Action: Check out a media item
@@ -312,6 +289,22 @@ export function initActionRequests(params) {
         await update(sql, res, req, pool, params);
     });
 
+    
+
+    /**
+     * Action: Reset the database back to its initial state
+     */
+    app.post('/api/reset', async (req, res) => {
+        const sql = `CALL `;
+        await update(sql, res, req, pool);
+    });
+
+
+}
+
+export function initFeeRequests(params) {
+    const { app, pool } = params;
+
     /**
      * Action: Pay a fee
      */
@@ -323,12 +316,27 @@ export function initActionRequests(params) {
     });
 
     /**
-     * Action: Reset the database back to its initial state
+     * Action: Check and update fee statuses
      */
-    app.post('/api/reset', async (req, res) => {
-        const sql = `CALL `;
+    app.post('/api/fee/check', async (req, res) => {
+        const sql = `CALL spCheckFees();`;
         await update(sql, res, req, pool);
     });
 
+    // Get all fees by fee status
+    app.get('/api/fees/fee_status', async (req, res) => {
+        await query(readSQLFile("reports/report_fees_by_status.sql"), res, req, pool);
+    });
 
+    // Get all overdue fees
+    app.get('/api/fee/overdue', async (req, res) => {
+        await query("SELECT * FROM fee WHERE fee_status_id=2;", res, req, pool);
+    });
+
+    // Get all fees for a user
+    // NOTE: THIS HAS TO BE AT THE END OF THE INSTANTIATIONS (because order of the routes matters)
+    app.get('/api/fee/:user_id', async (req, res) => {
+        const userId = req.params.user_id;
+        await query(`SELECT * FROM fee WHERE user_id=${userId};`, res, req, pool);
+    });
 }

@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import { createPool } from 'mariadb';
-import { initBasicGETRequests, initBasicPUTRequests, initBasicPOSTRequests, initBasicDELETERequests, initReportRequests, initActionRequests, initMiscProceduresRequests } from './db_initialization.js';
+import { initBasicGETRequests, initBasicPUTRequests, initBasicPOSTRequests, initBasicDELETERequests, initReportRequests, initActionRequests, initMiscProceduresRequests, initFeeRequests } from './db_initialization.js';
 import { LOCAL_DB_PORT, openTunnel } from './ssh_initialization.js';
 
 // Configure the .env
@@ -42,8 +42,9 @@ initBasicGETRequests(params);
 initBasicPUTRequests(params);
 initBasicPOSTRequests(params);
 initBasicDELETERequests(params);
-initReportRequests(params);
+initFeeRequests(params);
 initActionRequests(params);
+initReportRequests(params);
 initMiscProceduresRequests(params);
 
 // Initialize listening port

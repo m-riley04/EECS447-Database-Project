@@ -128,8 +128,7 @@ const StaffPage = () => {
                     console.log('Fees checked successfully:', response);
                     
                     // Refresh the fee tables after checking fees
-                    handleRefreshFees();
-                    handleRefreshOverdueFees();
+                    refreshTables();
                 } else {
                     console.error('No fees found.');
                 }

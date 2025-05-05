@@ -17,7 +17,11 @@ export async function getCheckedOutItems(): Promise<MediaItemModel[]> {
 }
 
 export async function checkFees() {
-    const response = await fetch(`${SERVER_API_URL}/fee/check`);
+    const response = await fetch(`${SERVER_API_URL}/fee/check`,
+        {
+            method: "POST"
+        }
+    );
     const data = await response.json();
     return data;
 }
