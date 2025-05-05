@@ -219,21 +219,31 @@ export function initReportRequests(params) {
         await query(`SELECT * FROM transaction WHERE user_id=${userId} AND return_date IS NULL;`, res, req, pool);
     });
 
+    // Get all transactions
+    app.get('/api/transaction', async (req, res) => {
+        await query(`SELECT * FROM transaction;`, res, req, pool);
+    });
+
     // Get all transactions by a user
     app.get('/api/transaction/:user_id', async (req, res) => {
         const userId = req.params.user_id;
         await query(`SELECT * FROM transaction WHERE user_id=${userId};`, res, req, pool);
     });
 
-    // Get all fees for a user
-    app.get('/api/fee/:user_id', async (req, res) => {
-        const userId = req.params.user_id;
-        await query(`SELECT * FROM fee WHERE user_id=${userId}`, res, req, pool);
+    // Get all fees
+    app.get('/api/fee', async (req, res) => {
+        await query(`SELECT * FROM fee`, res, req, pool);
     });
 
     // Get all overdue fees
     app.get('/api/fee/overdue', async (req, res) => {
-        await query("SELECT * FROM fee WHERE fee_status=2", res, req, pool);
+        await query("SELECT * FROM fee WHERE fee_status_id=2;", res, req, pool);
+    });
+
+    // Get all fees for a user
+    app.get('/api/fee/:user_id', async (req, res) => {
+        const userId = req.params.user_id;
+        await query(`SELECT * FROM fee WHERE user_id=${userId};`, res, req, pool);
     });
 
     // Get books by a specific author
@@ -271,6 +281,14 @@ export function initReportRequests(params) {
  */
 export function initActionRequests(params) {
     const { app, pool } = params;
+
+    /**
+     * Action: Check and update fee statuses
+     */
+    app.post('/api/fee/check', async (req, res) => {
+        const sql = `CALL spCheckFees();`;
+        await update(sql, res, req, pool);
+    });
 
     /**
      * Action: Check out a media item

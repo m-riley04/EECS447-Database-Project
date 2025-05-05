@@ -16,6 +16,12 @@ export async function getCheckedOutItems(): Promise<MediaItemModel[]> {
     return data;
 }
 
+export async function checkFees() {
+    const response = await fetch(`${SERVER_API_URL}/fee/check`);
+    const data = await response.json();
+    return data;
+}
+
 export async function checkUserByEmail(email: string) {
     const response = await fetch(`${SERVER_API_URL}/user/email/${email}`);
     const data = await response.json();
@@ -27,6 +33,18 @@ export async function checkUserByEmail(email: string) {
         }
     }
 
+    return data;
+}
+
+export async function getAllOverdueFees() {
+    const response = await fetch(`${SERVER_API_URL}/fee/overdue`);
+    const data = await response.json();
+    return data;
+}
+
+export async function getAllTransactions() {
+    const response = await fetch(`${SERVER_API_URL}/transaction`);
+    const data = await response.json();
     return data;
 }
 

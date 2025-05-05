@@ -2,7 +2,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import UserMediaItemView from '../components/UserMediaItemView/UserMediaItemView';
 import { useEffect, useState } from 'react';
 import { fetchData, getUserById } from '../server/server_functions';
-import CheckoutForm from '../components/CheckoutForm/CheckoutForm';
 import UserModel from '../models/UserModel';
 
 const UserPage = () => {

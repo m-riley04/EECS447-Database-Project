@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import UserModel from '../models/UserModel';
-import { getCheckedOutItemsByUserId, getFeesByUserId, getUserById } from '../server/server_functions';
+import { getCheckedOutItemsByUserId, getFeesByUserId, getTransactionsByUserId, getUserById } from '../server/server_functions';
 import { AccountStatusEnum } from '../enums/AccountStatusEnum';
 import { MembershipTypeEnum } from '../enums/MembershipTypeEnum';
 import UserCheckedOutView from '../components/UserCheckedOutView/UserCheckedOutView';
 import TransactionModel from '../models/TransactionModel';
 import FeeModel from '../models/FeeModel';
 import UserFeeView from '../components/UserFeeView/UserFeeView';
+import TableListView from '../components/TableListView/TableListView';
 
 /**
  * Formats a phone number string to a standard format.
@@ -99,7 +100,22 @@ const HomePage = () => {
     }
 
     function handleRefreshTransactions() {
+        if (!userId || userId === '0') return;
 
+        getTransactionsByUserId(parseInt(userId))
+            .then((response) => {
+                if (response.length > 0) {
+                    console.log(response);
+                    setTransactions(response);
+                } else {
+                    console.error(`No transactions found for user ID ${userId}.`);
+                    setTransactions([]);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching transactions:', error);
+                setTransactions([]);
+            });
     }
 
     // On page load...
@@ -151,7 +167,7 @@ const HomePage = () => {
             <h2>My Fees</h2>
                 <UserFeeView userId={parseInt(userId)} refreshItems={handleRefreshFees} fees={fees} />
             <h2>My Transactions</h2>
-
+                <TableListView items={transactions} />
             <h2>Actions</h2>
             <button onClick={() => navigate(`/staff/${userId}`)} hidden={!user.is_staff}>Staff</button>
             <button onClick={() => navigate(`/user/${userId}`)}>User</button>

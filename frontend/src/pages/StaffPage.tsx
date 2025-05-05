@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import UserModel from '../models/UserModel';
-import { fetchData, getUserById } from '../server/server_functions';
+import { checkFees, fetchData, getAllOverdueFees, getUserById } from '../server/server_functions';
 import TableListView from '../components/TableListView/TableListView';
 import FeeModel from '../models/FeeModel';
 import TransactionModel from '../models/TransactionModel';
@@ -16,6 +16,7 @@ const StaffPage = () => {
     const [fees, setFees] = useState<FeeModel[]>([]);
     const [overdueFees, setOverdueFees] = useState<FeeModel[]>([]);
     const [checkedOutItems, setCheckedOutItems] = useState<TransactionModel[]>([]);
+    const [transactions, setTransactions] = useState<TransactionModel[]>([]);
 
     function handleRefreshUser() {
         if (!userId || userId === '0') return;
@@ -71,9 +72,26 @@ const StaffPage = () => {
             });
     }
 
-    function handleRefreshOverdueFees() {
-        fetchData('fee/overdue')
+    function handleRefreshTransactions() {
+        fetchData('transaction')
             .then((response) => {
+                if (response.length > 0) {
+                    setTransactions(response);
+                } else {
+                    console.error('No transactions found.');
+                    setTransactions([]);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching transactions:', error);
+                setTransactions([]);
+            });
+    }
+
+    function handleRefreshOverdueFees() {
+        getAllOverdueFees()
+            .then((response) => {
+                console.log(response);
                 if (response.length > 0) {
                     setOverdueFees(response);
                 } else {
@@ -103,11 +121,30 @@ const StaffPage = () => {
             });
     }
 
+    function handleCheckFees() {
+        checkFees()
+            .then((response) => {
+                if (response.length > 0) {
+                    console.log('Fees checked successfully:', response);
+                    
+                    // Refresh the fee tables after checking fees
+                    handleRefreshFees();
+                    handleRefreshOverdueFees();
+                } else {
+                    console.error('No fees found.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error checking fees:', error);
+            });
+    }
+
     function refreshTables() {
         handleRefreshUsersList();
         handleRefreshFees();
         handleRefreshOverdueFees();
         handleRefreshCheckedOutItems();
+        handleRefreshTransactions();
     }
     
     // On page load...
@@ -165,17 +202,16 @@ const StaffPage = () => {
             <h3>Overdue Fees</h3>
             <TableListView items={overdueFees} />
 
-            <h2>Checked Out Items</h2>
+            <h2>Transactions</h2>
+            <TableListView items={transactions} />
+
+            <h3>Checked Out Items</h3>
             <TableListView items={checkedOutItems} />
 
             <h2>Actions</h2>
             <button onClick={handleRefreshUser}>Refresh User</button>
             <button onClick={refreshTables}>Refresh Tables</button>
-            <button onClick={() => {
-                // TODO: call "check fees" stored procedure
-
-                refreshTables();
-            }}>Check for fees</button>
+            <button onClick={handleCheckFees}>Check for fees</button>
             <button onClick={() => navigate(`/home/${userId}`)}>Home</button>
         </>
     )
